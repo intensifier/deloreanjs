@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, no-restricted-globals, no-unused-expressions, eqeqeq, no-native-reassign, array-callback-return, no-unused-vars */
 import ifBlockVisitor from './if-block.visitor';
 import restoreHeapVisitor from './restore-heap.visitor';
 import throwBreakVisitor from './throw-break.visitor';

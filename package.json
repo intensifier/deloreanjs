@@ -5,35 +5,44 @@
   "private": true,
   "author": "Felipe Ruiz, Guillermo Victorero, Tomás Vélez, Paul Leger",
   "dependencies": {
-    "@material-ui/core": "^4.8.2",
-    "@material-ui/icons": "^3.0.2",
-    "@material-ui/styles": "^4.9.0",
     "@uiw/react-codemirror": "^1.0.19",
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
     "brfs": "^2.0.2",
     "console-feed": "^3.0.0",
     "intro.js": "^3.0.1",
     "lodash.clonedeep": "^4.5.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-markdown": "^4.0.8",
-    "react-scripts": "^3.4.1",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
     "simplebar-react": "^2.2.1",
+    "stream-browserify": "^3.0.0",
     "unstated": "^2.1.1",
+    "util": "^0.12.5",
     "unwinder-engine": "0.0.3"
   },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app",
-    "override": [
+    "overrides": [
       {
-        "ignorePatterns": [
-          "/src/core/*.js"
-        ]
+        "files": [
+          "src/core/**/*.js"
+        ],
+        "rules": {
+          "no-undef": "off"
+        }
       }
     ]
   },
@@ -43,7 +52,21 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "browser": {
+    "assert": "assert",
+    "buffer": "buffer",
+    "fs": false,
+    "module": false,
+    "os": false,
+    "path": "path-browserify",
+    "process": "process/browser",
+    "stream": "stream-browserify",
+    "util": "util"
+  },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "ajv": "^8.18.0",
+    "ajv-keywords": "^5.1.0",
     "babel-core": "^6.26.3",
     "prettier": "^2.0.5"
   }

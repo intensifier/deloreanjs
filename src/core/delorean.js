@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, eqeqeq, no-loop-func, array-callback-return, no-eval, no-unused-vars */
 const { heapSnapshot } = require('./heap');
 
 global.breakpoint = {
@@ -16,7 +17,7 @@ module.exports = {
 
   insertBreakpoint: (id, loc = null) => {
     heapSnapshot(id, loc);
-    breakpoint = {
+    global.breakpoint = {
       id,
       activate: true,
     };

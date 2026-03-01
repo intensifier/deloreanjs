@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { StateContainer, SegmentedControl, SidebarSection, WatchVariables } from '../';
 import { copyOptions, runtimeOptions } from './constants';
 import './styles.css';
@@ -6,13 +6,13 @@ import './styles.css';
 export default function Sidebar(props) {
   const { appStore } = props;
 
-  const toggleCopyMode = useCallback((value) => {
+  const toggleCopyMode = (value) => {
     appStore.toggleCopy(value);
-  }, []);
+  };
 
-  const toggleRuntimeMode = useCallback((value) => {
+  const toggleRuntimeMode = (value) => {
     appStore.toggleImplicit(value);
-  }, []);
+  };
 
   return (
     <div className="sidebar-container">

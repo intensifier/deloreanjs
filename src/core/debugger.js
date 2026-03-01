@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, eqeqeq, no-loop-func, array-callback-return, no-eval, no-unused-vars */
 const { prepareCode } = require('./static-analysis');
 /* necessary for eval(code) */
 const { vm } = require('unwinder-engine');
@@ -11,12 +12,13 @@ function ldDeepCopy(original) {
 global.timeLine = 0;
 global.startFrom = '';
 global.fromTheFuture = false;
-global.implicitCounter;
-global.startTime;
-global.initTime;
-global.endTime;
-global.acumTime;
+global.implicitCounter = undefined;
+global.startTime = undefined;
+global.initTime = undefined;
+global.endTime = undefined;
+global.acumTime = undefined;
 global.implicitTimepoints = false;
+global.__deloreanLastError = null;
 
 function showTime() {
   console.log({
@@ -31,6 +33,7 @@ function showTime() {
 module.exports = {
   init: (input) => {
     global.implicitCounter = 0;
+    global.__deloreanLastError = null;
 
     let code = prepareCode(input);
 
@@ -42,11 +45,13 @@ module.exports = {
       global.endTime = Date.now();
       console.log(`%cFinish first execution`, 'background: #222; color: cyan');
     } catch (e) {
+      global.__deloreanLastError = e;
       console.error(e, 'Error from VM');
     }
   },
   invokeContinuation: (kont) => {
-    fromTheFuture = true;
+    global.fromTheFuture = true;
+    global.__deloreanLastError = null;
     try {
       global.startFrom = kont;
       global.heap.snapshots.find(
@@ -67,6 +72,7 @@ module.exports = {
       global.endTime = Date.now();
       console.log(`%cEnd TimePoint ${kont}`, 'background: #222; color: #bada55');
     } catch (e) {
+      global.__deloreanLastError = e;
       console.error(e, 'Error from VM');
     }
   },

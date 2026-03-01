@@ -8,8 +8,6 @@ export default function Timepoint(props) {
     isSelected,
     selectCurrentTimepoint,
     selectedTimepoint,
-    timelineIdx,
-    timelineList,
   } = props;
   const [isSelecting, setIsSelecting] = useState(false);
 
@@ -57,31 +55,44 @@ export default function Timepoint(props) {
   //   return !isItFromThePast.includes(true);
   // };
 
-  const timepointSelection = () => {
-    return (
-      <div className="tp-selection-container">
-        <div className="tp-selection-close-btn" onClick={toggleTimepointSelection}>
-          <span className="material-icons">close</span>
-        </div>
-        <p className="tp-selection-title">
-          <b>Select a timepoint</b>
-        </p>
-      </div>
-    );
+  const toggleTimepointSelection = () => {
+    if (!enable) return;
+    setIsSelecting((value) => !value);
   };
 
-  const toggleTimepointSelection = () => {
-    setIsSelecting(!isSelecting);
+  const openTimepointSelection = () => {
+    if (!enable) return;
+    setIsSelecting(true);
   };
+
+  const closeTimepointSelection = () => {
+    setIsSelecting(false);
+  };
+
+  const selectTimepoint = (timepoint) => {
+    if (!enable) return;
+    selectCurrentTimepoint(timepoint);
+    closeTimepointSelection();
+  };
+
+  const timepointClassName = [
+    'timepoint',
+    !enable && 'disable-timepoint',
+    isSelected && enable && 'selected-timepoint',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className="timepoint-container">
-      {isSelecting && timepointSelection()}
+    <div
+      className="timepoint-container"
+      onMouseEnter={openTimepointSelection}
+      onMouseLeave={closeTimepointSelection}>
       <div
         onClick={toggleTimepointSelection}
-        className={`timepoint ${!enable && 'disable-timepoint'} ${
-          isSelected && enable && 'selected-timepoint'
-        }`}>
+        onFocus={openTimepointSelection}
+        tabIndex={0}
+        className={timepointClassName}>
         <span className="material-icons">room</span>
       </div>
 
@@ -91,13 +102,12 @@ export default function Timepoint(props) {
           left: '50%',
         }}>
         <section
-          className="group-timepoint-details-container"
-          style={{
-            display: `${isSelecting ? 'flex' : 'none'}`,
-          }}>
+          className={`group-timepoint-details-container ${isSelecting ? 'details-visible' : ''}`}
+          onMouseEnter={openTimepointSelection}
+          onMouseLeave={closeTimepointSelection}>
           {timepoints.map((timepoint, index) => {
             const { timePointId, timePointLoc, timePointTimestamp } = timepoint;
-            let isSelectedTimepoint = selectedTimepoint == timePointId ? true : false;
+            let isSelectedTimepoint = selectedTimepoint === timePointId;
             // let isTimepointEnable = isEnable(timepoint);
 
             // console.log({
@@ -111,7 +121,7 @@ export default function Timepoint(props) {
                 className={`timepoint-details-container
                   ${isSelectedTimepoint && 'tp-details-container-selected'}
                 `}
-                onClick={() => selectCurrentTimepoint(timepoint)}>
+                onClick={() => selectTimepoint(timepoint)}>
                 <h3 className="timepoint-title">{timePointId}</h3>
                 <p className="timepoint-loc">Line: {timePointLoc}</p>
                 <div className="timepoint-footer">

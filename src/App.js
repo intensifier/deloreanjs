@@ -4,55 +4,43 @@ import SimpleBar from 'simplebar-react';
 import './App.css';
 
 import intro from './introduction';
-global.delorean = require('./core/delorean.js'); // this line allow uses global variables form core/delorean (global.breakpoint -> state.js)
-const debuggerDelorean = require('./core/debugger');
+import { attachKeyboardShortcuts } from './utils/keyboardShortcuts';
+
+global.delorean = require('./core/delorean.js');
+const runtimeService = require('./core/runtime-service');
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.consoleFeed = createRef();
-    this.saveCode();
-    this.addWatchVariable();
+    this.detachKeyboardShortcuts = null;
   }
 
-  addWatchVariable = () => {
-    document.addEventListener(
-      'keydown',
-      (e) => {
-        if (e.keyCode == 13) {
-          e.preventDefault();
-          let el = document.activeElement;
-          if (el.classList.contains('watch-variable-input')) {
-            this.props.store.addVariable();
-          }
-        }
-      },
-      false,
-    );
-  };
+  componentDidMount() {
+    this.detachKeyboardShortcuts = attachKeyboardShortcuts({
+      onEnterWatchVariable: () => this.props.store.addVariable(),
+      onSaveCode: () => this.props.store.saveCode(),
+    });
+  }
 
-  saveCode = () => {
-    document.addEventListener(
-      'keydown',
-      (e) => {
-        if (e.keyCode == 83 && (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey)) {
-          e.preventDefault();
-          this.props.store.saveCode();
-        }
-      },
-      false,
-    );
+  componentWillUnmount() {
+    if (this.detachKeyboardShortcuts) {
+      this.detachKeyboardShortcuts();
+    }
+  }
+
+  clearConsole = () => {
+    if (this.consoleFeed.current && this.consoleFeed.current.state) {
+      this.consoleFeed.current.state.logs = [];
+    }
   };
 
   executeCode = () => {
     const { store } = this.props;
+
     try {
-      this.consoleFeed.current.state.logs = [];
-      const [tab] = store.getSelectedTab();
-      debuggerDelorean.init(tab.savedCode);
-      store.updateDependencies(global.heap.dependencies);
-      store.updateSnapshots(global.heap.snapshots);
-      store.toggleIsRunning();
+      this.clearConsole();
+      store.execution.runCurrentTab(runtimeService);
     } catch (error) {
       console.error(error);
     }
@@ -60,19 +48,16 @@ class App extends Component {
 
   stopExecution = () => {
     const { store } = this.props;
-    this.consoleFeed.current.state.logs = [];
-    store.toggleIsRunning();
-    store.clean(store.state.watchVariables);
-    global.timeLine = 0;
-    global.startFrom = '';
+    this.clearConsole();
+    store.execution.stop(runtimeService);
   };
 
   invokeContinuation = () => {
     const { store } = this.props;
+
     if (store.state.selectedTimePoint) {
-      this.consoleFeed.current.state.logs = [];
-      debuggerDelorean.invokeContinuation(store.state.selectedTimePoint);
-      store.updateSnapshots(global.heap.snapshots);
+      this.clearConsole();
+      store.execution.resumeSelectedTimepoint(runtimeService);
     } else {
       alert('Please, select your Timepoint!');
     }
@@ -92,25 +77,19 @@ class App extends Component {
                     <SimpleBar>
                       <EditorBar
                         appStore={this.props.store}
-                        selectTab={this.selectTab}
                         executeCode={this.executeCode}
                         stopExecution={this.stopExecution}
                       />
                     </SimpleBar>
                   </div>
-                  <SimpleBar style={{ maxHeight: '40vh' }}>
-                    {this.props.store.getSelectedEditor()}
-                  </SimpleBar>
+                  <SimpleBar style={{ maxHeight: '40vh' }}>{this.props.store.getSelectedEditor()}</SimpleBar>
                 </div>
                 <div className="console-container">
                   <Console ref={this.consoleFeed} />
                 </div>
               </div>
               <div className="bottom-panel">
-                <TimelineViewer
-                  store={this.props.store}
-                  getEndTimes={debuggerDelorean.getEndTimes}
-                />
+                <TimelineViewer store={this.props.store} getEndTimes={runtimeService.getEndTimes} />
               </div>
             </div>
             <FAB

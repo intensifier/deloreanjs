@@ -1,14 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider, Subscribe } from 'unstated';
 import AppContainer from './containers/AppContainer';
 import './index.css';
 import 'simplebar/dist/simplebar.min.css';
 import App from './App';
 
-ReactDOM.render(
+if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
+  window.global = window;
+}
+
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <Provider>
     <Subscribe to={[AppContainer]}>{(store) => <App store={store} />}</Subscribe>
   </Provider>,
-  document.getElementById('root'),
 );

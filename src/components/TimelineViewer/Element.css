@@ -17,3 +17,7 @@
 .timeline-end-container {
   background: #1ca32a;
 }
+
+.timeline-end-container-error {
+  background: #d62828;
+}

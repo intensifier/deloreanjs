@@ -19,7 +19,6 @@ function StatusBar(props) {
         <a
           style={{ textDecoration: 'none' }}
           href="https://github.com/fruizrob/deloreanjs"
-          rel="noreferrer"
           target="_blank"
           rel="noopener noreferrer">
           <div className="flex-row github-button button">

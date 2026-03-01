@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import SimpleBar from 'simplebar-react';
 import './styles.css';
-import { red } from 'color-name';
 
 export default function SidebarSection(props) {
   const { title, icon, section } = props;

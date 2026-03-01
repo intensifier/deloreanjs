@@ -1,13 +1,28 @@
 import React from 'react';
 
 export default function Line(props) {
-  const { start, end, type, selectedTimepointLine } = props;
+  const { start, end, type, selectedTimepointLine, timelineIdx = 0 } = props;
 
-  if (type == 'horizontal') {
+  const toFiniteNumber = (value, fallback = 0) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+
+  const getLineStartOffset = (value, isMainTimeline) => {
+    const numericValue = toFiniteNumber(value, 0);
+    if (isMainTimeline) {
+      return numericValue > 1 ? numericValue * 5 + 2 : numericValue;
+    }
+
+    return numericValue * 5 + 2;
+  };
+
+  if (type === 'horizontal') {
+    const marginLeft = getLineStartOffset(start, timelineIdx === 0);
     return (
       <div
         style={{
-          marginLeft: `${start > 1 ? start * 5 + 2 : start}em`,
+          marginLeft: `${marginLeft}em`,
           width: `${end * 5}em`,
           height: '0.5em',
           zIndex: '-1',
@@ -17,12 +32,13 @@ export default function Line(props) {
           backgroundColor: '#6cd0e5',
         }}></div>
     );
-  } else if (type == 'vertial') {
+  } else if (type === 'vertial') {
     let end = selectedTimepointLine;
+    const marginLeft = getLineStartOffset(start, false);
     return (
       <div
         style={{
-          marginLeft: `${start > 1 ? start * 5 + 2 : start}em`,
+          marginLeft: `${marginLeft}em`,
           width: '0.5em',
           height: `${end * 7}em`,
           zIndex: '-1',

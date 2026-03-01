@@ -7,7 +7,7 @@ const Tab = (props) => {
   const [hoverSaveIcon, setHoverSaveIcon] = useState(false);
 
   const showRequiresSavedIcon = () => {
-    return tab.code != tab.savedCode && !hoverSaveIcon ? true : false;
+    return tab.code !== tab.savedCode && !hoverSaveIcon;
   };
 
   const toggleHoverSaveIcon = (e) => {

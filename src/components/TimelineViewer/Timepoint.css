@@ -5,39 +5,6 @@
   align-items: flex-end;
 }
 
-.tp-selection-container {
-  position: absolute;
-  top: -1.7em;
-  right: -2em;
-  width: 9em;
-  height: 1.3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  border-radius: 0.5em;
-  transition-duration: 250ms;
-}
-
-.tp-selection-close-btn {
-  background: #adadad;
-  color: white;
-  cursor: pointer;
-  border-radius: 50%;
-  display: grid;
-  place-content: center;
-  margin-right: 3px;
-}
-
-.tp-selection-close-btn span {
-  font-size: 16px;
-}
-
-.tp-selection-title {
-  color: rgb(60, 72, 88);
-  font-size: 13px;
-}
-
 .timepoint {
   display: grid;
   place-items: center;
@@ -59,6 +26,7 @@
 
 .disable-timepoint {
   background: #adadad;
+  cursor: default;
 }
 
 .selected-timepoint {
@@ -70,11 +38,20 @@
 }
 
 .group-timepoint-details-container {
-  position: relative;
+  position: absolute;
   top: 2.2em;
-  left: -50%;
-  right: -2em;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-in-out;
+  z-index: 1000;
+}
+
+.group-timepoint-details-container.details-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .timepoint-details-container {
@@ -92,12 +69,8 @@
   background: #ffdb00;
 }
 
-/* .timepoint:hover + .group-timepoint-details-container {
-  opacity: 1;
-} */
-
 .timepoint-details-container p,
-h3 {
+.timepoint-details-container h3 {
   padding: 0;
   margin: 0;
 }

@@ -1,7 +1,15 @@
 export const transformWithoutBabel = (code) => {
   return (
     `
-  function updateProp(parentName, obj){
+	  var global =
+	    (typeof globalThis !== 'undefined' && globalThis.global) ||
+	    (typeof globalThis !== 'undefined' && globalThis) ||
+	    (typeof window !== 'undefined' && window) ||
+	    (typeof self !== 'undefined' && self) ||
+	    {};
+	  if (typeof global.startFrom !== 'string') global.startFrom = '';
+	  if (typeof global.timeLine !== 'number') global.timeLine = 0;
+	  function updateProp(parentName, obj){
     Object.keys(obj).map(function(key){
       if (typeof obj[key] != 'object'){
         if(document.getElementById('input-' + parentName + '-' + key) && document.getElementById('input-' + parentName + '-' + key).value != '') {
@@ -30,20 +38,21 @@ export const transformWithoutBabel = (code) => {
 
     let counter = 0;
     let id = originalId;
-    let startFromNumber = global.startFrom;
+	    let startFrom = typeof global.startFrom === 'string' ? global.startFrom : '';
+	    let startFromNumber = startFrom;
 
-    let i = 0;
-    while(isNaN(parseInt(startFromNumber))){
-        startFromNumber = global.startFrom.slice(i); 
-        if (i > global.startFrom.length) break;
-        ++i;
-    }
+	    let i = 0;
+	    while(isNaN(parseInt(startFromNumber))){
+	        startFromNumber = startFrom.slice(i); 
+	        if (i > startFrom.length) break;
+	        ++i;
+	    }
 
-    if(i <= global.startFrom.length){
-        let startFromName = global.startFrom.slice(0, i-1);
-        if( id == 'kont' + startFromName) {
-          counter = parseInt(startFromNumber); 
-          id = id + (++counter);  
+	    if(i <= startFrom.length){
+	        let startFromName = startFrom.slice(0, i-1);
+	        if( id == 'kont' + startFromName) {
+	          counter = parseInt(startFromNumber); 
+	          id = id + (++counter);  
         } 
     }
 

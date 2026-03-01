@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useMemo, Fragment } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import './styles.css';
 
 const StateObject = (props) => {
-  const { name, type, element, isSubdependency } = props;
+  const { name, element, isSubdependency } = props;
   const [expanded, setExpanded] = useState(false);
 
   const onPressExpand = useCallback(() => {
@@ -15,7 +15,7 @@ const StateObject = (props) => {
     return typeof item;
   }, []);
 
-  const dependencyType = useMemo(() => checkDependencyType(element), [element]);
+  const dependencyType = useMemo(() => checkDependencyType(element), [checkDependencyType, element]);
 
   const renderSubdependency = useCallback(
     (subdependency, index) => {
@@ -40,7 +40,7 @@ const StateObject = (props) => {
         </div>
       );
     },
-    [name],
+    [checkDependencyType, dependencyType, isSubdependency, name],
   );
 
   return (

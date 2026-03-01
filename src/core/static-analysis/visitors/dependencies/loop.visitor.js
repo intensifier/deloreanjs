@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, no-restricted-globals, no-unused-expressions, eqeqeq, no-native-reassign, array-callback-return, no-unused-vars */
 export default {
   'ForStatement|DoWhileStatement|WhileStatement'(path) {
     let test = path.get('test');
@@ -13,18 +14,18 @@ export default {
         test.traverse({
           Identifier(path) {
             var isInMemberExpression = false;
-            parent = path.context.parentPath;
+            let parentPath = path.context.parentPath;
             while (
-              parent.node.type != 'ForStatement' &&
-              parent.node.type != 'WhileStatement' &&
-              parent.node.type != 'DoWhileStatement'
+              parentPath.node.type != 'ForStatement' &&
+              parentPath.node.type != 'WhileStatement' &&
+              parentPath.node.type != 'DoWhileStatement'
             ) {
-              if (parent.node.type == 'MemberExpression') {
+              if (parentPath.node.type == 'MemberExpression') {
                 isInMemberExpression = true;
                 break;
               }
 
-              parent = parent.context.parentPath;
+              parentPath = parentPath.context.parentPath;
             }
 
             if (

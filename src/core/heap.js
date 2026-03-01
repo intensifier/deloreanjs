@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, eqeqeq, no-loop-func, array-callback-return, no-eval, no-unused-vars */
 global.heap = {};
 global.dependencies = [];
 heap.snapshots = [];
@@ -20,16 +21,17 @@ module.exports = {
 
     let originId = id;
     let counter = 0;
-    let startFromNumber = global.startFrom;
+    let startFrom = typeof global.startFrom === 'string' ? global.startFrom : '';
+    let startFromNumber = startFrom;
     let i = 0;
 
     while (isNaN(parseInt(startFromNumber))) {
-      startFromNumber = global.startFrom.slice(i);
-      if (i > global.startFrom.length) break;
+      startFromNumber = startFrom.slice(i);
+      if (i > startFrom.length) break;
       ++i;
     }
-    if (i <= global.startFrom.length) {
-      let startFromName = global.startFrom.slice(0, i - 1);
+    if (i <= startFrom.length) {
+      let startFromName = startFrom.slice(0, i - 1);
       if (id == startFromName) {
         counter = parseInt(startFromNumber);
         id = id + ++counter;

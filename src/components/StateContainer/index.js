@@ -22,7 +22,7 @@ export default function StateContainer(props) {
         appStore.selectCurrentTimepoint(timepoint);
       }
     }
-  }, [global.breakpoint]);
+  }, [appStore]);
 
   return (
     <div className="state-panel-container">

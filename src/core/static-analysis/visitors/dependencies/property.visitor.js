@@ -1,3 +1,4 @@
+/* eslint-disable no-undef, no-restricted-globals, no-unused-expressions, eqeqeq, no-native-reassign, array-callback-return, no-unused-vars */
 export default {
   CallExpression(path) {
     let influentialExpression = false;
@@ -9,7 +10,7 @@ export default {
           dependencies.some((dependency) => dependency.name == path.node.name)
         ) {
           influentialExpression = true;
-          path.stop;
+          path.stop();
         }
       },
     });

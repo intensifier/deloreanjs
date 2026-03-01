@@ -23,6 +23,32 @@ DeloreanJs provides four features:
 
 Of course, DeloreanJs is open source. This software is developed by Felipe Ruiz (Main Developer) and Guillermo Victorero, under the supervision of [Paul Leger](http://pleger.cl) at [Pragmatics Lab](http://pragmaticslab.com)
 
+## Development
+
+- Recommended runtime: **Node.js 20** (see `.nvmrc`)
+- Install dependencies:
+  - `npm install`
+- Run in dev mode:
+  - `npm start`
+- Run tests:
+  - `npm test -- --watchAll=false`
+- Create production build:
+  - `npm run build`
+
+Notes:
+- Material UI dependencies were removed because they were unused in `src/` and introduced peer conflicts.
+- `unwinder-engine` depends on Node core modules; CRA 5/Webpack 5 support is handled via `craco.config.js`.
+- If npm blocks peer dependencies in this legacy codebase, use:
+  - `npm install --legacy-peer-deps`
+
+## Public docs downloads
+
+- [`docs/README.md`](./docs/README.md)
+- [`docs/REFACTOR_HANDOFF_2026-02-27.md`](./docs/REFACTOR_HANDOFF_2026-02-27.md)
+- [`docs/UNWINDER_ENGINE_ANALYSIS.md`](./docs/UNWINDER_ENGINE_ANALYSIS.md)
+
+These docs are AI-authored context files (Codex/GPT-5) and are intentionally kept for future maintainers and agents.
+
 ## License
 
 MIT

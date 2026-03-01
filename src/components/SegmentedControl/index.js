@@ -15,7 +15,7 @@ export default function SegmentedControl(props) {
     } else {
       setTranslateValue('0%');
     }
-  }, []);
+  }, [options, value]);
 
   const styles = {
     transform: `translate(${translateValue})`,
@@ -27,7 +27,7 @@ export default function SegmentedControl(props) {
 
   useEffect(() => {
     setTranslateValue(value === first.label ? '0%' : '100%');
-  }, [value]);
+  }, [first.label, value]);
 
   return (
     <div>
